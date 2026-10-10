@@ -20,6 +20,13 @@ The database and user are both named `onsite_print`. Postgres is published on
 
 ## Publish a version
 
+Publishing uses the current `major.minor.patch` tag in `.env`, then increments
+the patch number only after the push succeeds (`0.0.1` -> `0.0.2`). Failures
+leave it unchanged. Commit the updated version file and do not publish
+concurrently. Stale files or retries after an interrupted push can still
+overwrite tags. Use the printed published tag when deploying; the incremented
+tag is not yet available. `latest` and prerelease tags are not supported.
+
 Create a GitHub personal access token (classic) with `write:packages` permission
 and access to the `groskopf` namespace. Set `CR_PAT` securely in your environment
 (do not commit it). If the token belongs to a different GitHub user, also set
