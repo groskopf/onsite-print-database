@@ -44,6 +44,19 @@ bash docker-push.sh
 The script logs in to GHCR, builds the Dockerfile with the latest base image, and
 pushes `ghcr.io/groskopf/onsite-print-database:<IMAGE_TAG>`. It stops if any step fails.
 
+Alternatively, trigger the **Publish release** GitHub Actions workflow from the
+Actions tab (`workflow_dispatch` only, runs from `main`). It reads the pending
+`IMAGE_TAG` from `.env`, builds and pushes the image to GHCR using the built-in
+`GITHUB_TOKEN`, tags the published commit on `main` with that version (no `v`
+prefix), and commits the incremented `.env` back to `main`. This requires one-
+time setup: personal-account repos can't add GitHub Actions to a ruleset's
+bypass list, so add a `RELEASE_TOKEN` repository secret holding a fine-grained
+personal access token (owned by a repository admin, scoped to this repo with
+Contents: Read and write permission), and add the **Repository admin** role to
+the branch ruleset's bypass list for `main`. Pushes authenticated with
+`RELEASE_TOKEN` are attributed to the token owner's admin role and bypass the
+pull-request requirement. Renew the token before it expires.
+
 ## Run
 
 ```sh
